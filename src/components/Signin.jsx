@@ -2,13 +2,14 @@
 import React, {useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { UserAuth } from '../context/AuthContext'
+import {collection, addDoc} from 'firebase/firestore'
 const Signin = () => {
-    const {signIn} = UserAuth();
+    const {signIn} = UserAuth ();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const navigate = useNavigate()
-    const handleSubmit = async (e) =>{
+    const handleSubmit = async (e)=>{
         e.preventDefault();
         setError('')
 
@@ -18,8 +19,7 @@ const Signin = () => {
 
         } catch (e) {
             setError(e.message);
-            console.log(e.message);
-
+            alert(e.message);
             
         }
     }
@@ -32,7 +32,7 @@ const Signin = () => {
         <div>
             <h1 className='text-2xl font-bold py-2'>Log in to your account</h1>
             <p className='py-2'>
-                Don't have an account yet? <Link to ='/signup' className='underline'>Sign up</Link>
+                Don`t have an account yet? <Link to ='/signup' className='underline'>Sign up</Link>
             </p>
         </div>
         <form onSubmit={handleSubmit}>

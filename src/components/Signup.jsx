@@ -1,7 +1,10 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 /* eslint-disable no-unused-vars */
 import { UserAuth } from '../context/AuthContext'
+import { db } from '../firebase'
+import { addDoc, collection, doc, setDoc } from 'firebase/firestore'
 
 const Signup = () => {
     const [email, setEmail] = useState('')
@@ -14,11 +17,21 @@ const Signup = () => {
         e.preventDefault();
         setError('')
         try {
-            await createUser(email, password)
+            const uid = await createUser(email, password)
+            // console.log(uid);
+
+            const userCollectionRef = collection(db, "users");
+            const docRef = doc(userCollectionRef, uid);
+            
+            await setDoc(docRef, {
+                username: email,
+                password: password,
+            })
+            console.log('Document written with id: ', docRef.id);
             navigate('/account')
         } catch (e) {
             setError(e.message);
-            console.log(e.message);
+            alert(e.message);
         }
     }   
 
