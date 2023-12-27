@@ -1,4 +1,4 @@
-import { useState } from 'react'
+// import { useState } from 'react'
 
 import './App.css'
 import Signin from './components/Signin'
@@ -7,6 +7,7 @@ import Account from './components/Account'
 import { Route, Routes } from 'react-router-dom'
 import { AuthContextProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
+import Navbar from './components/Navbar'
 
 
 function App() {
@@ -14,7 +15,8 @@ function App() {
 
   return (
     <>
-      <h1 className='text-center text-3xl font-bold'>
+    <Navbar />
+      <h1 className='text-center text-3xl my-4 font-bold'>
         Firebase Auth and Context
       </h1>
       <AuthContextProvider>

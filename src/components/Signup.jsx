@@ -26,6 +26,7 @@ const Signup = () => {
             await setDoc(docRef, {
                 username: email,
                 password: password,
+                loginCount: 1,
             })
             console.log('Document written with id: ', docRef.id);
             navigate('/account')

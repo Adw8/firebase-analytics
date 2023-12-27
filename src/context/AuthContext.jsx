@@ -18,8 +18,10 @@ export const AuthContextProvider = ({children}) =>{
         // console.log(uid);
     };
 
-    const signIn = (email, password) =>{
-        return signInWithEmailAndPassword(auth, email, password)
+    const signIn = async (email, password) =>{
+        const currentUser = await signInWithEmailAndPassword(auth, email, password);
+        const user = currentUser.user;
+        return user.uid;
     };
 
     const logout = () =>{
