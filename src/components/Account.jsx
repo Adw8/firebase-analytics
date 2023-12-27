@@ -1,7 +1,7 @@
 import React from 'react'
 import { UserAuth } from '../context/AuthContext'
-import { useNavigate } from "react-router-dom";
-import UserDashboard from './Dashboard';
+import { Link, useNavigate } from "react-router-dom";
+// import UserDashboard from './Dashboard';
 
 const Account = () => {
   const {user, logout} = UserAuth();
@@ -19,15 +19,17 @@ const Account = () => {
   
 
   return (
-
+    <> 
+    <h1 className='text-center text-3xl my-4 font-bold'>
+      Account Info
+    </h1>
     <div className='max-w-2xl mx-auto my-16 p-4 bg-white shadow-md rounded-md'>
-      <h1 className='text-2xl font-bold py-4'>Account</h1>
+      {/* <h1 className='text-2xl font-bold py-4'>Account</h1> */}
       <p className='mb-4'><strong>User Email: </strong> {user && user.email}</p>
       <p className='mb-4'><strong>Account created on: </strong> {user && user.metadata && user.metadata.creationTime}</p>
       <p className='mb-4'><strong>Last Login at : </strong> {user && user.metadata && user.metadata.lastSignInTime}</p>
 
-      {/* <button onClick={()=>console.log(user)}>ffff</button> */}
-      <UserDashboard />
+      <p className='my-4'><Link to ='/reports' className='underline'>View User Info</Link></p>
       <button
         onClick={handleLogout}
         className='bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded'
@@ -35,6 +37,7 @@ const Account = () => {
         Logout
       </button>
     </div>
+    </>
   )
 }
 

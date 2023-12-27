@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { db } from '../firebase'// Replace with the path to your Firebase config file
 import {collection, query, where, getDocs} from 'firebase/firestore'
-
+import ModalComponent from './Modal';
 
 const UserDashboard = () => {
     const [userData, setUserData] = useState([]);
@@ -34,56 +34,29 @@ const UserDashboard = () => {
         alert(error.message);
       }
     };
+    const modalHeadings = ['User ID', 'Username', 'LoginCount'];
+
+    const modalTableData = userData.map((user) => [user.id, user.username, user.loginCount]);
+
   
     return (
-        <div>
-        <h1 className='text-2xl font-bold mb-4'>User Login Data</h1>
-        <div className='text-center mt-8'>
+    <div>
+    <h1 className='text-center text-3xl my-4 font-bold'>Reports</h1>
+    <div className='max-w-4xl mx-auto my-16 p-4 bg-white shadow-md rounded-md'>
+      <div className='flex items-center justify-between'>
+        <h1 className='text-2xl mb-4'>Total Login Count of users</h1>
         <button
-            onClick={openModal}
-            className='bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'
+          onClick={openModal}
+          className='bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'
         >
-            View Login Info
+          View Login Info
         </button>
-
-        {isModalOpen && (
-          <div className='fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center'>
-            <div className='bg-white p-4 rounded-lg w-225'>
-              <h2 className='text-lg font-semibold mb-4'>All Users</h2>
-              <div className='overflow-x-auto mr-4'>
-              <table className='w-full'>
-                <thead>
-                  <tr>
-                    <th className='border px-4 py-2'>User ID</th>
-                    <th className='border px-4 py-2 mr-4'>Username</th>
-                    <th className='border px-4 py-2 mr-4'>LoginCount</th>
-
-                  </tr>
-                </thead>
-                <tbody>
-                  {userData.map((user) => (
-                    <tr key={user.id}>
-                      <td className='border px-4 py-2'>{user.id}</td>
-                      <td className='border px-4 py-2 mr-4'>{user.username}</td>
-                      <td className='border px-4 py-2 mr-4'>{user.loginCount}</td>
-
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-              </div>
-              <button
-                onClick={closeModal}
-                className='mt-4 px-4 py-2 bg-green-600 text-white rounded'
-              >
-                Close
-              </button>
-            </div>
-          </div>
-         
-        )}
       </div>
-      </div>
+
+      <ModalComponent isOpen={isModalOpen} onClose={closeModal} headings={modalHeadings} tableData={modalTableData} />
+    </div>
+  </div>
+
     );
   };
   

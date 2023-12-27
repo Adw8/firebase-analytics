@@ -3,7 +3,7 @@ import React, {useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { UserAuth } from '../context/AuthContext'
 import { db } from '../firebase'
-import { addDoc, collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
+import { Timestamp, addDoc, collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from 'firebase/firestore'
 const Signin = () => {
     const {signIn} = UserAuth ();
     const [email, setEmail] = useState('')
@@ -16,6 +16,7 @@ const Signin = () => {
         try {
             const uid = await signIn(email, password)
             await incrementLoginCount(uid);
+            await updateMetrics(uid);
             navigate('/account');
 
         } catch (e) {
@@ -24,7 +25,6 @@ const Signin = () => {
             
         }
     }
-
     const incrementLoginCount = async(uid) =>{
         const userDocRef = doc(collection(db, "users"), uid);
         const userDoc = await getDoc(userDocRef);
@@ -33,7 +33,11 @@ const Signin = () => {
             loginCount: currentLoginCount + 1,
         });
     }
-
+    const updateMetrics = async(uid) =>{
+        await incrementLoginCount(uid);
+    
+    }
+      
     return (
  
 
