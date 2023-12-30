@@ -1,7 +1,7 @@
 import React from 'react'
 import { UserAuth } from '../context/AuthContext'
 import { Link, useNavigate } from "react-router-dom";
-import { arrayRemove, arrayUnion, collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
 // import UserDashboard from './Dashboard';
 
@@ -13,10 +13,8 @@ const Account = () => {
     try {
       await logout(); 
       navigate('/');
-      // const session_id = localStorage.getItem('session_id')
-      // console.log(user.uid, session_id, timestamp)
+  
       await updateSessionEndOnLogout()
-      // console.log('logged out!');
     } catch (error) {
       console.log(error.message);
     }

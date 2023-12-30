@@ -6,7 +6,7 @@ import { UserAuth } from '../context/AuthContext'
 import { db } from '../firebase'
 import { incrementLoginCount, storeSessionStart } from './Db'
 import Signin from './Signin'
-import { addDoc, collection, doc, increment, setDoc } from 'firebase/firestore'
+import { addDoc, collection, doc, getDoc, increment, setDoc, updateDoc } from 'firebase/firestore'
 
 const Signup = () => {
     const [email, setEmail] = useState('')
@@ -29,6 +29,9 @@ const Signup = () => {
                 username: email,
                 loginCount: 1,
             })
+            const userDocRef = doc(collection(db, "userSessions"), uid)
+            const userDoc = getDoc(userDocRef)
+
             storeSessionStart(uid)
             console.log('Document written with id: ', docRef.id);
             navigate('/account')

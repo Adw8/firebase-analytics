@@ -1,15 +1,18 @@
 import { useEffect, useState } from 'react';
 import { db } from '../firebase'// Replace with the path to your Firebase config file
-import {collection, getDocs, setDoc} from 'firebase/firestore'
+import {collection, doc, getDoc, getDocs, setDoc} from 'firebase/firestore'
+import { UserAuth } from '../context/AuthContext';
 import ModalComponent from './Modal';
-import Yesterday from './yesterday';
 
 const UserDashboard = () => {
+  const {user} = UserAuth();
     const [userData, setUserData] = useState([]);
-    const [userSessionData, setUserSessionData] = useState([]);
+    const [currSessionData, setCurrSessionData] = useState([]);
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isYesterdayModalOpen, setIsYesterdayModalOpen] = useState(false);
+    const [isSessionModalOpen, setIsSessionModalOpen] = useState(false);
+
     const [docID, setDocID] = useState([])
   
     const openModal = () => {
@@ -27,6 +30,14 @@ const UserDashboard = () => {
       setIsYesterdayModalOpen(false)
     } 
     
+    const openSessionModal = () =>{
+      setIsSessionModalOpen(true);
+      getSessions();
+    }
+    const closeSessionModal = () =>{
+      setIsSessionModalOpen(false);
+
+    }
     
 
     const getData = async () => {
@@ -72,11 +83,8 @@ const UserDashboard = () => {
     
     
             if (formattedDate === yesterday.toString().slice(8, 11)) {
-              userSessionArray.push({
-                id: doc.id,
-                session_start: session.session_start,
-                session_end: session.session_end,
-              });
+            
+             
               docs.push(doc.id);
               break;
             }}
@@ -93,14 +101,48 @@ const UserDashboard = () => {
       }
     };
 
+    
+
 
     const modalHeadingsYesterday = ['User ID'];
+   
     const modalTableDataYesterday = docID.map((id) => [
       id
-      
-      // Math.random(),
-      // session.session_start,
-      // session.session_end,
+    ]);
+
+    const getSessions = async () => {
+      const userSessions = []
+      try {
+        const docRef = doc(collection(db, "userSessions"), user.uid);
+        const docSnapshot = await getDoc(docRef);
+    
+        if (docSnapshot.exists()) {
+          // console.log(docSnapshot.data().sessions);
+          docSnapshot.data().sessions.map((session)=>{
+            userSessions.push({
+              session_start: session.session_start,
+              session_end: session.session_end
+            })
+          })
+          // Additional processing of docSnapshot.data() if needed
+          setCurrSessionData(userSessions)
+          console.log("Curr ", currSessionData)
+        } else {
+          console.log("Document does not exist.");
+        }
+      } catch (error) {
+        console.error("Error fetching sessions:", error);
+        // Handle the error appropriately
+      }
+    };
+    
+    const modalHeadingsSessions = ['Session Start', 'Session End'];
+    // const modalTableData = userData.map((user) => [user.username, user.loginCount]);  
+    // const date = new Date(timestamp.seconds * 1000 + timestamp.nanoseconds / 1e6);
+   
+    const modalTableDataSessions = currSessionData.map((user) => [
+      user.session_start && new Date(user.session_start.seconds * 1000 + user.session_start.nanoseconds / 1e6).toLocaleString() || "",
+  user.session_end && new Date(user.session_end.seconds * 1000 + user.session_end.nanoseconds / 1e6).toLocaleString() || ""
     ]);
     
   
@@ -131,10 +173,23 @@ const UserDashboard = () => {
         >
           View User Info
         </button>
-        {/* <button onClick={logModalData}>openYesterdayModal</button> */}
       </div>
       <ModalComponent isOpen={isYesterdayModalOpen} onClose={closeYesterdayModal} headings={modalHeadingsYesterday} tableData={modalTableDataYesterday} />
     </div>
+
+    <div className='max-w-4xl mx-auto my-16 p-4 bg-white shadow-md rounded-md'>
+      <div className='flex items-center justify-between'>
+        <h1 className='text-2xl mb-4'>View my sessions</h1>
+        <button
+          onClick={openSessionModal}
+          className='bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded'
+        >
+          View Info
+        </button>
+      </div>
+      <ModalComponent isOpen={isSessionModalOpen} onClose={closeSessionModal} headings={modalHeadingsSessions} tableData={modalTableDataSessions} />
+    </div>
+    
 
 
   </div>
