@@ -4,7 +4,9 @@ import { Link, useNavigate } from 'react-router-dom'
 /* eslint-disable no-unused-vars */
 import { UserAuth } from '../context/AuthContext'
 import { db } from '../firebase'
-import { addDoc, collection, doc, setDoc } from 'firebase/firestore'
+import { incrementLoginCount, storeSessionStart } from './Db'
+import Signin from './Signin'
+import { addDoc, collection, doc, increment, setDoc } from 'firebase/firestore'
 
 const Signup = () => {
     const [email, setEmail] = useState('')
@@ -23,11 +25,11 @@ const Signup = () => {
             const userCollectionRef = collection(db, "users");
             const docRef = doc(userCollectionRef, uid);
             
-            await setDoc(docRef, {
+            setDoc(docRef, {
                 username: email,
-                password: password,
                 loginCount: 1,
             })
+            storeSessionStart(uid)
             console.log('Document written with id: ', docRef.id);
             navigate('/account')
         } catch (e) {

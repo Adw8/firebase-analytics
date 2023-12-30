@@ -3,7 +3,8 @@ import React, {useState} from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { UserAuth } from '../context/AuthContext'
 import { db } from '../firebase'
-import { Timestamp, addDoc, collection, doc, getDoc, getDocs, query, serverTimestamp, setDoc, updateDoc, where } from 'firebase/firestore'
+import {storeSessionStart, incrementLoginCount} from './Db'
+import {collection, doc, getDoc, setDoc, updateDoc, where } from 'firebase/firestore'
 const Signin = () => {
     const {signIn} = UserAuth ();
     const [email, setEmail] = useState('')
@@ -15,8 +16,8 @@ const Signin = () => {
         setError('')
         try {
             const uid = await signIn(email, password)
-            await incrementLoginCount(uid);
-            await updateMetrics(uid);
+            incrementLoginCount(uid);
+            storeSessionStart(uid);
             navigate('/account');
 
         } catch (e) {
@@ -25,18 +26,8 @@ const Signin = () => {
             
         }
     }
-    const incrementLoginCount = async(uid) =>{
-        const userDocRef = doc(collection(db, "users"), uid);
-        const userDoc = await getDoc(userDocRef);
-        const currentLoginCount = userDoc.exists() ? userDoc.data().loginCount || 0: 0
-        await updateDoc(userDocRef, {
-            loginCount: currentLoginCount + 1,
-        });
-    }
-    const updateMetrics = async(uid) =>{
-        await incrementLoginCount(uid);
+   
     
-    }
       
     return (
  
@@ -67,5 +58,4 @@ const Signin = () => {
     </div>
   )
 }
-
 export default Signin

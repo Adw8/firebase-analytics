@@ -1,20 +1,62 @@
 import React from 'react'
 import { UserAuth } from '../context/AuthContext'
 import { Link, useNavigate } from "react-router-dom";
+import { arrayRemove, arrayUnion, collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
+import { db } from '../firebase';
 // import UserDashboard from './Dashboard';
 
 const Account = () => {
   const {user, logout} = UserAuth();
   const navigate = useNavigate();
+
   const handleLogout = async () =>{
     try {
       await logout(); 
       navigate('/');
+      // const session_id = localStorage.getItem('session_id')
+      // console.log(user.uid, session_id, timestamp)
+      await updateSessionEndOnLogout()
       // console.log('logged out!');
     } catch (error) {
       console.log(error.message);
     }
   }
+
+  const updateSessionEndOnLogout = async () => {
+    try {
+        const userDocRef = doc(collection(db, "userSessions"), user.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+            const id = Number(localStorage.getItem("session_id"));
+            const timestamp = new Date();
+
+    
+          const updatedSessions = userDoc.data().sessions.map(session => {
+            if (session.session_id === id) {
+                return {
+                    ...session,
+                    session_end: timestamp,
+                };
+            }
+            return session;
+        });
+          //  console.log(sessionsCopy)
+          
+           await setDoc(userDocRef, {
+            sessions: updatedSessions,
+        });
+
+        } else {
+            console.log('User document not found.');
+        }
+    } catch (error) {
+        console.log('Error updating session end:', error.message);
+    }
+};
+
+
+ 
 
   
 
@@ -36,6 +78,7 @@ const Account = () => {
       >
         Logout
       </button>
+      
     </div>
     </>
   )

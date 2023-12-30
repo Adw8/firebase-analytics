@@ -12,17 +12,17 @@ const Navbar = () => {
         {/* Logos */}
         <div className="flex items-center">
           <div className="text-white text-lg font-semibold mr-4">
-            <IoLogoFirebase />
+            {/* <IoLogoFirebase /> */}
           </div>
           <div className="text-white text-lg font-semibold">
-            <FaReact/>
+            {/* <FaReact/> */}
           </div>
         </div>
 
         {/* Heading */}
-        <div className="text-white text-lg font-semibold">
+        {/* <div className="text-white text-lg font-semibold">
           Firebase Auth
-        </div>
+        </div> */}
         
 
 
