@@ -3,6 +3,7 @@ import { db } from '../firebase'// Replace with the path to your Firebase config
 import {collection, doc, getDoc, getDocs, setDoc} from 'firebase/firestore'
 import { UserAuth } from '../context/AuthContext';
 import ModalComponent from './Modal';
+import Navbar from './Navbar';
 
 const UserDashboard = () => {
   const {user} = UserAuth();
@@ -93,7 +94,7 @@ const UserDashboard = () => {
           setDocID(docs)
         // });
     
-        setUserSessionData(userSessionArray);
+        // setUserSessionData(userSessionArray);
         // console.log(userSessionArray)
         // return userSessionArray
       } catch (error) {
@@ -148,6 +149,8 @@ const UserDashboard = () => {
   
     return (
     <div>
+    <Navbar />
+
     <h1 className='text-center text-3xl my-4 font-bold'>Reports</h1>
     <div className='max-w-4xl mx-auto my-16 p-4 bg-white shadow-md rounded-md'>
       <div className='flex items-center justify-between'>

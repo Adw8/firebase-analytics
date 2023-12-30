@@ -3,6 +3,7 @@ import { UserAuth } from '../context/AuthContext'
 import { Link, useNavigate } from "react-router-dom";
 import { collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from '../firebase';
+import Navbar from './Navbar';
 // import UserDashboard from './Dashboard';
 
 const Account = () => {
@@ -60,6 +61,8 @@ const Account = () => {
 
   return (
     <> 
+    <Navbar />
+
     <h1 className='text-center text-3xl my-4 font-bold'>
       Account Info
     </h1>
