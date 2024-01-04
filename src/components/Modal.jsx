@@ -1,4 +1,5 @@
-import React from 'react';
+
+// import React from 'react';
 
 const ModalComponent = ({ isOpen, onClose, headings, tableData }) => {
   return (

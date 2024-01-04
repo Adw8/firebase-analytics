@@ -12,10 +12,10 @@ const Navbar = () => {
         {/* Logos */}
         <div className="flex items-center">
           <div className="text-white text-lg font-semibold mr-4">
-            {/* <IoLogoFirebase /> */}
+            <IoLogoFirebase />
           </div>
           <div className="text-white text-lg font-semibold">
-            {/* <FaReact/> */}
+            <FaReact/>
           </div>
         </div>
 
@@ -31,7 +31,7 @@ const Navbar = () => {
           <a href="/account" className="text-white hover:text-gray-300">Account</a>
           {/* <a href="#" className="text-white hover:text-gray-300">About</a> */}
           <a href="/reports" className="text-white hover:text-gray-300">Reports</a>
-          <a href="#" className="text-white hover:text-gray-300">Contact</a>
+          {/* <a href="#" className="text-white hover:text-gray-300">Contact</a> */}
         </div>
       </div>
     </nav>
